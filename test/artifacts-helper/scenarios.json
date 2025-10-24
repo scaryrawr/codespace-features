@@ -42,5 +42,29 @@
                 "python": false
             }
         }
+    },
+    "shims_enabled": {
+        "image": "mcr.microsoft.com/devcontainers/base:debian",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {},
+            "artifacts-helper": {
+                "useShims": true
+            }
+        }
+    },
+    "shims_with_nvm": {
+        "image": "mcr.microsoft.com/devcontainers/base:debian",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {
+                "version": "lts",
+                "nodeGypDependencies": true,
+                "nvmVersion": "latest"
+            },
+            "artifacts-helper": {
+                "useShims": true,
+                "npmAlias": true,
+                "yarnAlias": true
+            }
+        }
     }
 }
