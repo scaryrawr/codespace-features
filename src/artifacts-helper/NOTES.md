@@ -2,6 +2,25 @@ This installs [Azure Artifacts Credential Provider](https://github.com/microsoft
 and optionally configures functions which shadow `dotnet`, `nuget`, `npm`, `yarn`, `rush`, and `pnpm` which dynamically sets an authentication token
 for pulling artifacts from a feed before running the command.
 
+## Using PATH Shims (Recommended for non-shell scripts)
+
+By default, authentication is configured using shell functions in `bashrc`/`zshrc`. This only works for commands issued by users in interactive shells.
+
+To enable authentication in non-shell scripts (Python, Node.js, etc.), set `"useShims": true`:
+
+```jsonc
+// .devcontainer/devcontainer.json
+{
+    "features": {
+        "ghcr.io/github/codespace-features/artifacts-helper:latest": {
+            "useShims": true
+        }
+    }
+}
+```
+
+This creates executable shims in `/usr/local/artifacts-shims` that are added early to PATH, wrapping the real commands with authentication. These shims work from any process, not just interactive shells.
+
 For `npm`, `yarn`, `rush`, and `pnpm` this requires that your `~/.npmrc` file is configured to use the ${ARTIFACTS_ACCESSTOKEN}
 environment variable for the `authToken`. A helper script has been added that you can use to write your `~/.npmrc`
 file during your setup process, though there are many ways you could accomplish this. To use the script, run it like

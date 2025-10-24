@@ -13,6 +13,7 @@ ALIAS_RUSH="${RUSHALIAS:-"true"}"
 ALIAS_PNPM="${PNPMALIAS:-"true"}"
 INSTALL_PIP_HELPER="${PYTHON:-"false"}"
 COMMA_SEP_TARGET_FILES="${TARGETFILES:-"DEFAULT"}"
+USE_SHIMS="${USESHIMS:-"false"}"
 
 ALIASES_ARR=()
 
@@ -124,19 +125,41 @@ if [ "${COMMA_SEP_TARGET_FILES}" = "DEFAULT" ]; then
     fi
 fi
 
-IFS=',' read -r -a TARGET_FILES_ARR <<< "$COMMA_SEP_TARGET_FILES"
-
-for ALIAS in "${ALIASES_ARR[@]}"; do
-    for TARGET_FILE in "${TARGET_FILES_ARR[@]}"; do
-        CMD="$ALIAS() { /usr/local/bin/run-$ALIAS.sh \"\$@\"; }"
-
-        if [ "${INSTALL_WITH_SUDO}" = "true" ]; then
-            sudo -u ${_REMOTE_USER} bash -c "echo '$CMD' >> $TARGET_FILE"
+if [ "${USE_SHIMS}" = "true" ]; then
+    # Create shim directory early in PATH
+    SHIM_DIR="/usr/local/artifacts-shims"
+    mkdir -p "${SHIM_DIR}"
+    
+    for ALIAS in "${ALIASES_ARR[@]}"; do
+        if [ "${ALIAS}" = "dotnet" ] || [ "${ALIAS}" = "nuget" ]; then
+            # Use dedicated shim scripts for dotnet/nuget
+            sed "s|REPLACE_WITH_AZURE_DEVOPS_NUGET_FEED_URL_PREFIX|${PREFIXES}|g" ./scripts/shim-${ALIAS}.sh > "${SHIM_DIR}/${ALIAS}"
         else
-            echo $CMD >> $TARGET_FILE || true
+            # Use template for other tools
+            sed "s|TOOL_NAME|${ALIAS}|g" ./scripts/shim-template.sh > "${SHIM_DIR}/${ALIAS}"
         fi
+        chmod +x "${SHIM_DIR}/${ALIAS}"
     done
-done
+    
+    # Add shim directory to PATH for all users
+    echo "export PATH=\"${SHIM_DIR}:\${PATH}\"" > /etc/profile.d/artifacts-shims.sh
+    chmod +x /etc/profile.d/artifacts-shims.sh
+else
+    # Legacy: Use shell functions
+    IFS=',' read -r -a TARGET_FILES_ARR <<< "$COMMA_SEP_TARGET_FILES"
+
+    for ALIAS in "${ALIASES_ARR[@]}"; do
+        for TARGET_FILE in "${TARGET_FILES_ARR[@]}"; do
+            CMD="$ALIAS() { /usr/local/bin/run-$ALIAS.sh \"\$@\"; }"
+
+            if [ "${INSTALL_WITH_SUDO}" = "true" ]; then
+                sudo -u ${_REMOTE_USER} bash -c "echo '$CMD' >> $TARGET_FILE"
+            else
+                echo $CMD >> $TARGET_FILE || true
+            fi
+        done
+    done
+fi
 
 if [ "${INSTALL_WITH_SUDO}" = "true" ]; then
     sudo -u ${_REMOTE_USER} bash -c "/tmp/install-provider.sh ${USENET6}"

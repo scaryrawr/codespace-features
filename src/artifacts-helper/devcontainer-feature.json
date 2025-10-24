@@ -58,6 +58,11 @@
             "type": "boolean",
             "default": false,
             "description": "Install Python keyring helper for pip"
+        },
+        "useShims": {
+            "type": "boolean",
+            "default": false,
+            "description": "Use PATH shims instead of shell functions (enables auth in non-shell scripts like Python/Node)"
         }
     },
     "installsAfter": [
