@@ -8,13 +8,13 @@ to acquire tokens via the ado-codespaces-auth VS Code extension. This enables `D
 
 ## Azure DevOps CLI Integration
 
-For `az devops` commands, the shim automatically sets the `AZURE_DEVOPS_EXT_PAT` environment variable using
-the `ado-auth-helper` when falling through to the real Azure CLI. This enables `az devops` commands to
-authenticate without requiring manual `az devops login` or setting the PAT manually.
+For `az devops` commands, the shim automatically sets the `AZURE_DEVOPS_EXT_PAT` environment variable
+using the `ado-auth-helper` when falling through to the real Azure CLI. This enables `az devops`
+commands to authenticate without requiring manual `az devops login` or setting the token manually.
 
 The shim will:
 1. Wait for `ado-auth-helper` to become available (up to 3 minutes, configurable via `MAX_WAIT`)
-2. Call `ado-auth-helper get-access-token` to retrieve the PAT
+2. Call `ado-auth-helper get-access-token` to retrieve an access token used by the Azure DevOps CLI extension
 3. Export `AZURE_DEVOPS_EXT_PAT` before executing the real `az` command
 
 If `AZURE_DEVOPS_EXT_PAT` is already set, the shim will not overwrite it. If `ado-auth-helper` is not

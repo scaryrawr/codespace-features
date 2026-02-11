@@ -112,6 +112,7 @@ HELPER
     chmod +x "${HOME}/ado-auth-helper"
     
     # Create mock az
+    mkdir -p "${HOME}/bin"
     cat > "${HOME}/bin/az" << '\''MOCKAZ'\''
 #!/bin/bash
 echo "PAT=${AZURE_DEVOPS_EXT_PAT}"
@@ -131,6 +132,7 @@ check "az shim falls through without ado-auth-helper" bash -c '
     rm -f "${HOME}/ado-auth-helper"
     
     # Create mock az
+    mkdir -p "${HOME}/bin"
     cat > "${HOME}/bin/az" << '\''MOCKAZ'\''
 #!/bin/bash
 echo "FALLTHROUGH_OK"
