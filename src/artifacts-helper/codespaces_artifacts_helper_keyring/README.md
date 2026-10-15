@@ -14,7 +14,7 @@ To install this package from source:
 $ cd src/artifacts-helper/codespaces_artifacts_helper_keyring
 
 # PDM is used to manage the project
-$ pip install 'pdm>=2.14'
+$ python3.12 -m pip install 'pdm==2.29.2'
 
 # Install dependencies and build the package
 $ pdm build
@@ -63,8 +63,12 @@ pip install <package_name> --index-url https://pkgs.dev.azure.com/<org_name>/_pa
 We use [PDM](https://pdm-project.org/) to manage the project and its dependencies. To get started, install PDM:
 
 ```sh
-$ pip install 'pdm>=2.14'
+$ python3.12 -m pip install 'pdm==2.29.2'
 ```
+
+The test and release workflows run PDM on Python 3.12, independently of the
+package's supported Python versions. PDM 2.15.1 is incompatible with the
+`argparse` API in current Python patch releases.
 
 Then, install the project dependencies:
 
