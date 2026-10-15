@@ -56,4 +56,6 @@ jobs:
           python-version: "3.12"
 
       - name: Run ${{ matrix.session }}
+        env:
+          PIP_CONSTRAINT: ${{ github.workspace }}/src/artifacts-helper/codespaces_artifacts_helper_keyring/ci-constraints.txt
         run: pdm run nox --error-on-missing-interpreters --error-on-external-run -s "${{ matrix.session }}"
