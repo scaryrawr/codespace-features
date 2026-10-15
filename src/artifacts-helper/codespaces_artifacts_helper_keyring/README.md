@@ -70,6 +70,9 @@ The test and release workflows run PDM on Python 3.12, independently of the
 package's supported Python versions. PDM 2.15.1 is incompatible with the
 `argparse` API in current Python patch releases.
 
+Nox uses Python's standard-library `venv` backend so Python 3.8 sessions do not
+depend on `virtualenv`'s bundled seed wheels, which no longer support Python 3.8.
+
 Then, install the project dependencies:
 
 ```sh
