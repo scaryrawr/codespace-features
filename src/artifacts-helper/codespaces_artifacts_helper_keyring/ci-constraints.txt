@@ -1,0 +1,2 @@
+# PDM resolves helper dependencies on its host but imports them on Python 3.8.
+packaging<26
