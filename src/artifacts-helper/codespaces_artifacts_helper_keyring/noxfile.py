@@ -3,6 +3,8 @@ from typing import List
 
 import nox
 
+nox.options.default_venv_backend = "venv"
+
 os.environ.update({"PDM_IGNORE_SAVED_PYTHON": "1"})
 
 DEFAULT_PYTHON_VERSION = "3.11"

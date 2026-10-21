@@ -21,8 +21,8 @@ jobs:
       - name: Setup PDM
         uses: pdm-project/setup-pdm@544d7237314ee09c256785bd360f6b30add38b37 # v4.6
         with:
-          version: "2.15.1"
-          python-version-file: "src/artifacts-helper/codespaces_artifacts_helper_keyring/pyproject.toml"
+          version: "2.29.2"
+          python-version: "3.12"
 
       - name: Run nox release
         run: pdm release

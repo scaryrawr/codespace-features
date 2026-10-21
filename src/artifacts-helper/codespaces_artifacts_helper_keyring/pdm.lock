@@ -2,10 +2,13 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "test", "lint", "dev", "stubs"]
+groups = ["default", "dev", "lint", "stubs", "test"]
 strategy = ["cross_platform", "inherit_metadata"]
-lock_version = "4.4.1"
-content_hash = "sha256:925556be1eaa3969c7fccc45fb0e45024b2b5664417c6cbe76b050cb0b2d74da"
+lock_version = "4.5.1"
+content_hash = "sha256:d1056ca93513692b42834c2ee5c4e3018015ac96bc1beef379556bf03547643a"
+
+[[metadata.targets]]
+requires_python = ">=3.8"
 
 [[package]]
 name = "argcomplete"
